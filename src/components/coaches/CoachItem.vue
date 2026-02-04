@@ -3,24 +3,24 @@ import { computed } from "vue";
 
 const { firstName, lastName, rate, areas } = defineProps({
   id: {
-    required: true,
     type: String,
+    required: true,
   },
   firstName: {
-    required: true,
     type: String,
+    required: true,
   },
   lastName: {
-    required: true,
     type: String,
+    required: true,
   },
   rate: {
-    required: true,
     type: Number,
+    required: true,
   },
   areas: {
-    required: true,
     type: Array,
+    required: true,
   },
 });
 
@@ -32,15 +32,19 @@ const fullName = computed(() => `${firstName} ${lastName}`);
     <h3>{{ fullName }}</h3>
     <h4>${{ rate }}/hour</h4>
     <div>
-      <span v-for="area in areas" :key="area">{{ area }}</span>
+      <base-badge v-for="area in areas" :key="area" :type="area" :title="area">
+      </base-badge>
     </div>
     <div class="actions">
-      <router-link :to="{ name: 'coachContactForm', params: { id } }"
-        >Contact</router-link
-      >
-      <router-link :to="{ name: 'coachDetails', params: { id } }"
-        >View Details</router-link
-      >
+      <base-button
+        mode="outline"
+        isLink
+        :to="{ name: 'coachContactForm', params: { id } }"
+        >Contact
+      </base-button>
+      <base-button isLink :to="{ name: 'coachDetails', params: { id } }"
+        >View Details
+      </base-button>
     </div>
   </li>
 </template>
