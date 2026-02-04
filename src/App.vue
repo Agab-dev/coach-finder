@@ -1,8 +1,24 @@
-<script setup></script>
+<script setup>
+import TheHeader from "./components/layout/TheHeader.vue";
+</script>
 
 <template>
-  <h1>Coach Finder</h1>
+  <the-header></the-header>
   <router-view></router-view>
 </template>
 
-<style scoped></style>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+</style>
