@@ -1,6 +1,11 @@
+import CoachDetails from "@/pages/coaches/CoachDetails.vue";
+import CoachList from "@/pages/coaches/CoachList.vue";
+import CoachRegistrationForm from "@/pages/coaches/CoachRegistrationForm.vue";
+import NotFound from "@/pages/NotFound.vue";
+import CoachContactForm from "@/pages/requests/CoachContactForm.vue";
+import RequestList from "@/pages/requests/RequestList.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
-// TODO: once you add the pages for each route, then register them to the relevant route
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -11,34 +16,34 @@ const router = createRouter({
     {
       path: "/coaches",
       name: "getAllCoaches",
-      component: null,
+      component: CoachList,
     },
     {
       path: "/coaches/:id",
       name: "getSingleCoach",
-      component: null,
+      component: CoachDetails,
       children: [
         {
-          path: "/contact",
+          path: "contact",
           name: "contactCoach",
-          component: null,
+          component: CoachContactForm,
         },
       ],
     },
     {
       path: "/register",
       name: "registerCoach",
-      component: null,
+      component: CoachRegistrationForm,
     },
     {
       path: "/requests",
       name: "getAllRequests",
-      component: null,
+      component: RequestList,
     },
     {
       path: "/:notFound(.*)",
       name: "NotFound",
-      component: null,
+      component: NotFound,
     },
   ],
 });
