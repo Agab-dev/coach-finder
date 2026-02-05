@@ -5,7 +5,7 @@ import { useCoachesStore } from "@/stores/coaches";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-const { coaches, hasCoaches } = storeToRefs(useCoachesStore());
+const { coaches, hasCoaches, isCoach } = storeToRefs(useCoachesStore());
 const activeFilters = ref({
   frontend: true,
   backend: true,
@@ -40,7 +40,10 @@ const filteredCoaches = computed(() => {
     <base-card>
       <div class="controls">
         <base-button mode="outline">Refresh</base-button>
-        <base-button isLink :to="{ name: 'coachRegistrationForm' }"
+        <base-button
+          v-if="!isCoach"
+          isLink
+          :to="{ name: 'coachRegistrationForm' }"
           >Register as Coach
         </base-button>
       </div>

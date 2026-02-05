@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import CoachForm from "@/components/coaches/CoachForm.vue";
+</script>
+
 <template>
-  <h1>Coach Registration Form</h1>
+  <section>
+    <base-card>
+      <h1>Register as a coach now!</h1>
+      <coach-form></coach-form>
+    </base-card>
+  </section>
 </template>
