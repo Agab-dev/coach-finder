@@ -12,7 +12,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/coachList",
+      redirect: "/coaches",
     },
     {
       path: "/coaches",
@@ -36,15 +36,6 @@ const router = createRouter({
       path: "/register",
       name: "coachRegistrationForm",
       component: CoachRegistrationForm,
-      beforeEnter: () => {
-        const { isCoach } = useCoachesStore();
-
-        if (isCoach) {
-          return { name: "coachesList" };
-        }
-
-        return true;
-      },
     },
     {
       path: "/requests",
