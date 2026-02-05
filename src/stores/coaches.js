@@ -2,6 +2,7 @@ import router from "@/router";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useAuthStore } from "./auth";
+import { createOrUpdateCoach } from "@/api/coaches";
 
 export const useCoachesStore = defineStore("coaches", () => {
   const coaches = ref([
@@ -27,12 +28,11 @@ export const useCoachesStore = defineStore("coaches", () => {
 
   const hasCoaches = computed(() => coaches.value.length > 0);
 
-  function registerCoach(data) {
+  async function registerCoach(data) {
     const authStore = useAuthStore();
     const authUserId = authStore.userId;
 
     const coachData = {
-      id: authUserId,
       firstName: data.first,
       lastName: data.last,
       description: data.desc,
@@ -40,7 +40,9 @@ export const useCoachesStore = defineStore("coaches", () => {
       areas: data.areas,
     };
 
-    coaches.value.unshift(coachData);
+    await createOrUpdateCoach(authUserId, coachData);
+
+    coaches.value.unshift({ ...coachData, id: authUserId });
 
     router.replace({ name: "coachList" });
   }
