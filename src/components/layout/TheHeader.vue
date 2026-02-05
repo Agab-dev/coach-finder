@@ -2,10 +2,10 @@
   <header>
     <nav>
       <h1>
-        <router-link :to="{ name: 'coacheList' }">Coach Finder</router-link>
+        <router-link :to="{ name: 'coachList' }">Coach Finder</router-link>
       </h1>
       <ul>
-        <li><router-link :to="{ name: 'coacheList' }">Coaches</router-link></li>
+        <li><router-link :to="{ name: 'coachList' }">Coaches</router-link></li>
         <li>
           <router-link :to="{ name: 'requestList' }">Requests</router-link>
         </li>

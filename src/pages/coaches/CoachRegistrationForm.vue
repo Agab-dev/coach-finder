@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import CoachForm from "@/components/coaches/CoachForm.vue";
 </script>
 

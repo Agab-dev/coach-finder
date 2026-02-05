@@ -42,7 +42,7 @@ export const useCoachesStore = defineStore("coaches", () => {
 
     coaches.value.unshift(coachData);
 
-    router.replace({ name: "coacheList" });
+    router.replace({ name: "coachList" });
   }
 
   const isCoach = computed(() => {

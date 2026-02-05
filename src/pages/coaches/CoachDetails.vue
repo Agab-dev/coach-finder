@@ -1,6 +1,7 @@
 <script setup>
 import { useCoachesStore } from "@/stores/coaches";
-import { computed, onBeforeMount } from "vue";
+import { computed, onBeforeMount, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const { id } = defineProps({
   id: {
@@ -8,6 +9,9 @@ const { id } = defineProps({
     required: true,
   },
 });
+
+const route = useRoute();
+const contactFormIsOpen = computed(() => route.path.includes("/contact"));
 
 let selectedCoach = null;
 
@@ -35,7 +39,10 @@ const areas = computed(() => selectedCoach.areas);
     <base-card>
       <header>
         <h2>Interested? Reach Out Now!</h2>
-        <base-button isLink :to="{ name: 'coachContactForm', params: { id } }"
+        <base-button
+          v-if="!contactFormIsOpen"
+          isLink
+          :to="{ name: 'coachContactForm', params: { id } }"
           >Contact
         </base-button>
         <router-view></router-view>
