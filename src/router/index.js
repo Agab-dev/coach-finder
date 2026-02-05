@@ -4,6 +4,7 @@ import CoachRegistrationForm from "@/pages/coaches/CoachRegistrationForm.vue";
 import NotFound from "@/pages/NotFound.vue";
 import CoachContactForm from "@/pages/requests/CoachContactForm.vue";
 import RequestList from "@/pages/requests/RequestList.vue";
+import { useCoachesStore } from "@/stores/coaches";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -11,7 +12,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/coaches",
+      redirect: "/coacheList",
     },
     {
       path: "/coaches",
@@ -35,6 +36,15 @@ const router = createRouter({
       path: "/register",
       name: "coachRegistrationForm",
       component: CoachRegistrationForm,
+      beforeEnter: () => {
+        const { isCoach } = useCoachesStore();
+
+        if (isCoach) {
+          return { name: "coachesList" };
+        }
+
+        return true;
+      },
     },
     {
       path: "/requests",
