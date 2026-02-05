@@ -1,16 +1,19 @@
 <script setup>
+import { getAllCoaches } from "@/api/coaches";
 import CoachFilter from "@/components/coaches/CoachFilter.vue";
 import CoachItem from "@/components/coaches/CoachItem.vue";
 import { useCoachesStore } from "@/stores/coaches";
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 
-const { coaches, hasCoaches, isCoach } = storeToRefs(useCoachesStore());
+const { coaches, hasCoaches, ...others } = storeToRefs(useCoachesStore());
 const activeFilters = ref({
   frontend: true,
   backend: true,
   career: true,
 });
+const isLoading = ref(false);
+const error = ref(null);
 
 function setFilters(updatedFilters) {
   activeFilters.value = updatedFilters;
@@ -30,24 +33,49 @@ const filteredCoaches = computed(() => {
     return false;
   });
 });
+
+async function loadCoaches() {
+  const response = await getAllCoaches();
+  error.value = response.error;
+  isLoading.value = response.isLoading;
+}
+
+function handleErrorModal() {
+  error.value = null;
+}
+
+onBeforeMount(async () => await loadCoaches());
 </script>
 
 <template>
+  <base-dialog
+    :show="error !== null"
+    title="An Error Occured!"
+    @close="handleErrorModal"
+  >
+    <p>
+      {{ error }}
+    </p>
+  </base-dialog>
   <section>
     <coach-filter @change-filter="setFilters"></coach-filter>
   </section>
   <section>
     <base-card>
       <div class="controls">
-        <base-button mode="outline">Refresh</base-button>
+        <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
         <base-button
-          v-if="!isCoach"
+          v-if="!isLoading && !others.isCoach"
           isLink
           :to="{ name: 'coachRegistrationForm' }"
           >Register as Coach
         </base-button>
       </div>
-      <ul v-if="hasCoaches">
+
+      <div v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+      <ul v-else-if="hasCoaches">
         <coach-item
           v-for="coach in filteredCoaches"
           :key="coach.id"
@@ -58,7 +86,7 @@ const filteredCoaches = computed(() => {
           :areas="coach.areas"
         ></coach-item>
       </ul>
-      <h3 v-else>No Coaches Found</h3>
+      <h3 v-else-if="!hasCoaches">No Coaches Found</h3>
     </base-card>
   </section>
 </template>
