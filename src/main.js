@@ -19,4 +19,6 @@ app.component("base-badge", BaseBadge);
 app.component("base-spinner", BaseSpinner);
 app.component("base-dialog", BaseDialog);
 
-app.mount("#app");
+router.isReady().then(function () {
+  app.mount("#app");
+});
