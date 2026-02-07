@@ -5,12 +5,18 @@ import { onBeforeMount, ref } from "vue";
 import { getAllRequests } from "@/api/requests";
 import { storeToRefs } from "pinia";
 
-const { requests, receivedRequests, hasRequests } =
+const { requests, receivedRequests, hasRequests, lastFetch } =
   storeToRefs(useRequestsStore());
 const isLoading = ref(false);
 const error = ref(null);
 
 async function loadRequests() {
+  const now = new Date().getTime();
+  if (lastFetch.value !== null && now - lastFetch.value < 5 * 60 * 1000) {
+    return;
+  }
+
+  lastFetch.value = new Date().getTime();
   const response = await getAllRequests(isLoading);
   requests.value = response.requests;
   error.value = response.error;

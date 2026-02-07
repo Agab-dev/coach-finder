@@ -35,7 +35,11 @@ const filteredCoaches = computed(() => {
   });
 });
 
-async function loadCoaches() {
+async function loadCoaches(forceRefresh = false) {
+  if (!forceRefresh && coaches.value.length > 0) {
+    return;
+  }
+
   const response = await getAllCoaches(isLoading);
   coaches.value = response.coaches;
   error.value = response.error;
@@ -70,7 +74,9 @@ onBeforeMount(async () => await loadCoaches());
   <section>
     <base-card>
       <div class="controls">
-        <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
+        <base-button mode="outline" @click="loadCoaches(true)"
+          >Refresh</base-button
+        >
         <base-button
           v-if="!isLoading && !isCoach"
           isLink
