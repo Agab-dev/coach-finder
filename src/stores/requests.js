@@ -5,6 +5,7 @@ import { createRequest } from "@/api/requests";
 
 export const useRequestsStore = defineStore("requests", () => {
   const requests = ref([]);
+  const lastFetch = ref(null);
 
   const receivedRequests = computed(() => {
     const authStore = useAuthStore();
@@ -26,5 +27,5 @@ export const useRequestsStore = defineStore("requests", () => {
     await createRequest(data.coachId, newRequest);
   }
 
-  return { requests, addRequest, hasRequests, receivedRequests };
+  return { requests, addRequest, hasRequests, receivedRequests, lastFetch };
 });
