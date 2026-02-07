@@ -11,7 +11,7 @@ const route = useRoute();
 
 const { addRequest } = useRequestsStore();
 
-function submitForm() {
+async function submitForm() {
   formIsValid.value = true;
 
   if (
@@ -23,7 +23,7 @@ function submitForm() {
     return;
   }
 
-  addRequest({
+  await addRequest({
     userEmail: email.value,
     message: message.value,
     coachId: route.params.id,

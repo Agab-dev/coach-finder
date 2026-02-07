@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useAuthStore } from "./auth";
+import { createRequest } from "@/api/requests";
 
 export const useRequestsStore = defineStore("requests", () => {
   const requests = ref([]);
@@ -16,13 +17,13 @@ export const useRequestsStore = defineStore("requests", () => {
     return receivedRequests.value.length > 0;
   });
 
-  function addRequest(data) {
-    requests.value.unshift({
-      id: crypto.randomUUID(),
+  async function addRequest(data) {
+    const newRequest = {
       userEmail: data.userEmail,
       message: data.message,
-      coachId: data.coachId,
-    });
+    };
+
+    await createRequest(data.coachId, newRequest);
   }
 
   return { requests, addRequest, hasRequests, receivedRequests };

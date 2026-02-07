@@ -15,7 +15,7 @@ export async function createOrUpdateCoach(coachId, coachData) {
       error.value =
         new Error("Something went wrong, while submitting coach data")
           .message || "Something went wrong";
-      throw error;
+      throw error.value;
     }
   } catch (err) {
     error.value = err.message || "Something went wrong";
@@ -25,9 +25,9 @@ export async function createOrUpdateCoach(coachId, coachData) {
   }
 }
 
-export async function getAllCoaches() {
-  const isLoading = ref(false);
+export async function getAllCoaches(isLoading = { value: false }) {
   const error = ref(null);
+  const formattedCoaches = ref([]);
   try {
     isLoading.value = true;
     const response = await fetch(BASE_URL + "/coaches.json");
@@ -36,15 +36,14 @@ export async function getAllCoaches() {
       error.value =
         new Error("Something went wrong, while fetching coaches data")
           .message || "Something went wrong";
-      throw error;
+      throw error.value;
     }
 
     const coaches = await response.json();
-
-    const formattedCoaches = [];
+    const temp = [];
 
     for (const key in coaches) {
-      formattedCoaches.unshift({
+      temp.unshift({
         id: key,
         firstName: coaches[key].firstName,
         lastName: coaches[key].lastName,
@@ -53,13 +52,15 @@ export async function getAllCoaches() {
         areas: coaches[key].areas,
       });
     }
-
-    return formattedCoaches;
+    formattedCoaches.value = temp;
   } catch (err) {
     error.value = err.message || "Something went wrong";
     return { error: error.message };
   } finally {
     isLoading.value = false;
-    return { isLoading: isLoading.value, error: error.value };
+    return {
+      error: error.value,
+      coaches: formattedCoaches.value,
+    };
   }
 }

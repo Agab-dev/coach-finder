@@ -2,6 +2,7 @@
 import { getAllCoaches } from "@/api/coaches";
 import CoachFilter from "@/components/coaches/CoachFilter.vue";
 import CoachItem from "@/components/coaches/CoachItem.vue";
+import { useAuthStore } from "@/stores/auth";
 import { useCoachesStore } from "@/stores/coaches";
 import { storeToRefs } from "pinia";
 import { computed, onBeforeMount, ref } from "vue";
@@ -35,10 +36,16 @@ const filteredCoaches = computed(() => {
 });
 
 async function loadCoaches() {
-  const response = await getAllCoaches();
+  const response = await getAllCoaches(isLoading);
+  coaches.value = response.coaches;
   error.value = response.error;
-  isLoading.value = response.isLoading;
 }
+
+const isCoach = computed(() => {
+  const authStore = useAuthStore();
+  const authUserId = authStore.userId;
+  return coaches.value.some((coach) => coach.id === authUserId);
+});
 
 function handleErrorModal() {
   error.value = null;
@@ -65,7 +72,7 @@ onBeforeMount(async () => await loadCoaches());
       <div class="controls">
         <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
         <base-button
-          v-if="!isLoading && !others.isCoach"
+          v-if="!isLoading && !isCoach"
           isLink
           :to="{ name: 'coachRegistrationForm' }"
           >Register as Coach
